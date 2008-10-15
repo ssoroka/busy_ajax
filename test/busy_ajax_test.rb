@@ -11,14 +11,14 @@ class BusyAjaxTest < Test::Unit::TestCase
   include BusyAjax
 
   def setup
-    @controller = ActionController::Base.new
-    @request    = ActionController::TestRequest.new
-    @controller.request = @request
-    @view = ActionView::Base.new
-    @view.controller = @controller
+    # @controller = ActionController::Base.new
+    # @request    = ActionController::TestRequest.new
+    # @controller.request = @request
+    # @view = ActionView::Base.new
+    # @view.controller = @controller
   end
 
-  # There's really nothing to test now that it's all unobtrusive!
+  # There's really nothing to test now that it's all unobtrusive javascript..
   
   def test_header
     # assert @view.busy_ajax_head == '<link href="/stylesheets/busy_ajax.css" media="screen" rel="Stylesheet" type="text/css" /><script src="/javascripts/busy_ajax.js" type="text/javascript"></script>'
