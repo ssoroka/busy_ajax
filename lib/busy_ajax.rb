@@ -1,0 +1,3 @@
+# BusyAjax
+module BusyAjax
+end

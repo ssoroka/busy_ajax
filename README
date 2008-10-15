@@ -1,0 +1,38 @@
+NOTE: This repo has been moved to http://github.com/ssoroka/
+Please get the latest version there.
+
+BusyAjax v0.3
+=============
+
+New in v0.3
+===========
+
+- Moved project to github. :)
+
+New in v0.2
+===========
+
+- New busy_off(); and busy_on(); javascript methods to turn the busy indicator on and off dynamically.
+An RJS example of that is:
+	page.call 'busy_off'
+
+- busy_ajax method is removed from layout, div is now added dynamically with javascript, very unobtrusive!
+
+- Generally much cleaner.
+
+Description
+===========
+
+All projects can benefit by having a simple ajax spinner that follows the mouse when ajax calls are being made by the browser in the background. Gives the user a better experience, and saves you from coding it into every "ajaxified" view.
+
+Usage
+=====
+in your document <head> put <%= javascript_include_tag 'busy_ajax' %>
+
+That's it!!
+
+If you had a pre-v0.2 copy of the project, You no longer need <%= busy_ajax %> in your project.
+
+Written by
+Steven Soroka
+http://blog.stevensoroka.ca
