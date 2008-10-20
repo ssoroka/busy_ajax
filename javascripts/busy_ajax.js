@@ -1,69 +1,86 @@
-var busyDivName = 'busy_ajax';
-var offX = 15;
-var offY = 15;
-var spinnerUrl = '/images/spinner.gif';
-
-Ajax.Responders.register({
-  onCreate: function() {
-    if($(busyDivName) && Ajax.activeRequestCount>0 && document.onmousemove) {
-      Effect.Appear(busyDivName,{duration:0.5});
+var BusyAjaxClass = Class.create({
+  busy_div_name: 'busy_ajax',
+  off_x: 15,
+  off_y: 15,
+  spinner_url: '/images/spinner.gif',
+  is_on: false,
+  initialize: function() {
+    Ajax.Responders.register({
+      onCreate: function() {
+        if(Ajax.activeRequestCount>0 && document.onmousemove) this.show_spinner();
+      },
+      onComplete: function() {
+        if(Ajax.activeRequestCount==0) this.hide_spinner();
+      }
+    });
+    var self = this;
+    document.observe("dom:loaded", function() {
+      self.enable();
+    });
+  },
+  enable: function() {
+    if (!this.is_on) {
+      try {
+        busydiv = new Element('div', {id: this.busy_div_name});
+        busydiv.setStyle({display:'none', position: 'absolute', zIndex: '32000'});
+        spinimg = new Element('img', {src: this.spinner_url});
+        busydiv.appendChild(spinimg);
+        document.body.appendChild(busydiv);
+        var self = this;
+        document.observe('mousemove', function(e){
+          self.follow(e);
+        });
+        this.is_on = true;
+      } catch (e) { alert('error; could not insert busy div:\n\n' + e.toString()); throw e }
     }
   },
-  onComplete: function() {
-    if($(busyDivName) && Ajax.activeRequestCount==0)
-      Effect.Fade(busyDivName,{duration:0.5});
+  disable: function() {
+    document.stopObserving('mousemove', this.follow);
+    busy_div = $(this.busy_div_name);
+    if (busy_div) busy_div.remove();
+    this.is_on = false;
+  },
+  follow: function(e) {
+    busy_div = $(this.busy_div_name);
+    if (busy_div && this.is_on) {
+      x = parseInt(this.mouse_x(e))+this.off_x;
+      y = parseInt(this.mouse_y(e))+this.off_y;
+      if (x + 16 > document.viewport.getWidth()) {
+        x = document.viewport.getWidth() - 16;
+      }
+      if (y + 16 > document.viewport.getHeight()) {
+        y = document.viewport.getHeight() - 16;
+      }
+      busy_div.setStyle({visibility: 'visible', left: (x + 'px'),
+        top: (y + 'px'), zIndex: '32000'});
+    }
+  },
+  mouse_x: function(e) {
+    if (!e) e = window.event;
+    if (e.pageX) return e.pageX;
+    else if (e.clientX) return e.clientX + (document.documentElement.scrollLeft ?  document.documentElement.scrollLeft : document.body.scrollLeft);
+    else return 0;
+  },
+  mouse_y: function(e) {
+    if (!e) e = window.event;
+    if (e.pageY) return e.pageY;
+    else if (e.clientY) return e.clientY + (document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop);
+    else return 0;
+  },
+  show_spinner: function() {
+    busy_div = $(this.busy_div_name);
+    if (busy_div)
+      busy_div.appear({duration:0.5});
+  },
+  hide_spinner: function() {
+    busy_div = $(this.busy_div_name);
+    if (busy_div)
+      busy_div.fade({duration:0.5});
   }
 });
 
-function mouseX(evt) {
-	if (!evt) evt = window.event;
-	if (evt.pageX) 
-		return evt.pageX;
-	else if (evt.clientX)
-		return evt.clientX + (document.documentElement.scrollLeft ? document.documentElement.scrollLeft : document.body.scrollLeft);
-	else 
-		return 0;
-}
-
-function mouseY(evt) {
-	if (!evt) evt = window.event;
- 	if (evt.pageY) return evt.pageY;
- 	else if (evt.clientY) return evt.clientY + (document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop);
-	else return 0;
-}
-
-function follow(evt) {
-	if (document.getElementById) {
-		var obj = document.getElementById(busyDivName).style;
-		obj.visibility = 'visible';
-		obj.left = (parseInt(mouseX(evt))+offX) + 'px';
-		obj.top = (parseInt(mouseY(evt))+offY) + 'px';
-	}
-}
-
-function busy_off() {
-	document.onmousemove = null;
-	$(busyDivName).remove();
-}
-
-function busy_on() {
-	try {
-		busydiv = document.createElement('div')
-		busydiv.id = busyDivName
-		// busydiv.setStyle('display:none;position:absolute;z-index:auto;')
-		busydiv.style['display'] = 'none'
-		busydiv.style['position'] = 'absolute'
-		busydiv.style['z-index'] = 'auto'		
-		spinimg = document.createElement('img')
-		spinimg.src = spinnerUrl;
-		busydiv.appendChild(spinimg)
-		setTimeout(function() {
-			document.body.appendChild(busydiv);
-			document.onmousemove = follow;
-		}, 1);
-	} catch (e) { alert('error; could not insert busy div:\n\n' + e.toString()); throw e }
-}
-
-document.observe("dom:loaded", function() {
-  busy_on();
-});
+var busy_ajax = new BusyAjaxClass();
+// I'm handy for debugging, forces the spinner to show:
+// document.observe("dom:loaded", function() {
+//   busy_ajax.show_spinner();
+// });

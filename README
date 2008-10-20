@@ -1,4 +1,4 @@
-BusyAjax v0.3
+BusyAjax v1.0
 =============
 
 Description
@@ -16,11 +16,12 @@ That's it!!
 
 If you had a pre-v0.2 copy of the project, You no longer need <%= busy_ajax %> in your project.
 
-Todo
-====
+New in v1.0
+===========
 
-- Make BusyAjax play nicer in the global namespace.
-
+- made BusyAjaxClass, moved everything there. Now plays nice in global namespace.
+- renamed busy_on() and busy_off() to enable() and disable() methods of BusyAjaxClass. 
+  Accessible through busy_ajax.enable(); or busy_ajax.disable();
 
 New in v0.3
 ===========
