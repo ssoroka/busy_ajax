@@ -1,4 +1,4 @@
-BusyAjax v1.0
+BusyAjax v1.1
 =============
 
 Description
@@ -10,11 +10,18 @@ Repo is http://github.com/ssoroka/busy_ajax/tree/master
 
 Usage
 =====
+script/plugin install git://github.com/ssoroka/busy_ajax.git
+
 in your document <head> put <%= javascript_include_tag 'busy_ajax' %>
 
 That's it!!
 
 If you had a pre-v0.2 copy of the project, You no longer need <%= busy_ajax %> in your project.
+
+New in v1.1
+===========
+
+- bug was causing spinner to never be displayed. :(  You'd think I would have caught that sooner.
 
 New in v1.0
 ===========
