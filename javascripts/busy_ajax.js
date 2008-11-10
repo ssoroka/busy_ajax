@@ -5,15 +5,15 @@ var BusyAjaxClass = Class.create({
   spinner_url: '/images/spinner.gif',
   is_on: false,
   initialize: function() {
+    var self = this;
     Ajax.Responders.register({
       onCreate: function() {
-        if(Ajax.activeRequestCount>0 && document.onmousemove) this.show_spinner();
+        if(Ajax.activeRequestCount>0 && self.is_on) self.show_spinner();
       },
       onComplete: function() {
-        if(Ajax.activeRequestCount==0) this.hide_spinner();
+        if(Ajax.activeRequestCount==0) self.hide_spinner();
       }
     });
-    var self = this;
     document.observe("dom:loaded", function() {
       self.enable();
     });
@@ -36,20 +36,22 @@ var BusyAjaxClass = Class.create({
   },
   disable: function() {
     document.stopObserving('mousemove', this.follow);
-    busy_div = $(this.busy_div_name);
+    var busy_div = $(this.busy_div_name);
     if (busy_div) busy_div.remove();
     this.is_on = false;
   },
   follow: function(e) {
-    busy_div = $(this.busy_div_name);
+    var busy_div = $(this.busy_div_name);
     if (busy_div && this.is_on) {
-      x = parseInt(this.mouse_x(e))+this.off_x;
-      y = parseInt(this.mouse_y(e))+this.off_y;
-      if (x + 16 > document.viewport.getWidth()) {
-        x = document.viewport.getWidth() - 16;
+      var w = window.innerWidth;
+      var h = window.innerHeight;
+      var x = parseInt(this.mouse_x(e))+this.off_x;
+      var y = parseInt(this.mouse_y(e))+this.off_y;
+      if (x + 16 > w) {
+        x = w - 16;
       }
-      if (y + 16 > document.viewport.getHeight()) {
-        y = document.viewport.getHeight() - 16;
+      if (y + 16 > h) {
+        y = h - 16;
       }
       busy_div.setStyle({visibility: 'visible', left: (x + 'px'),
         top: (y + 'px'), zIndex: '32000'});
@@ -68,12 +70,12 @@ var BusyAjaxClass = Class.create({
     else return 0;
   },
   show_spinner: function() {
-    busy_div = $(this.busy_div_name);
+    var busy_div = $(this.busy_div_name);
     if (busy_div)
       busy_div.appear({duration:0.5});
   },
   hide_spinner: function() {
-    busy_div = $(this.busy_div_name);
+    var busy_div = $(this.busy_div_name);
     if (busy_div)
       busy_div.fade({duration:0.5});
   }

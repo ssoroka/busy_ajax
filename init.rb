@@ -14,8 +14,8 @@ dest_path = File.join(RAILS_ROOT, 'public')
       if folder == 'javascripts' && !FileUtils.identical?(file, dest_file)
         # and if timestamp on vendor one is newer.. 
         if File.stat(file).atime > File.stat(dest_file).atime
-          puts "Warning: #{file_short} is newer than #{dest_file_short} and will *not* automatically be replaced.  Please copy #{file_short} to #{dest_file_short} if you have no local changes and the plugin javascript has updated, which it appears to have.
-  eg:   cp #{file_short} #{dest_file_short}"
+          puts "BusyAjax is copying #{file_short} to #{dest_file_short}"
+          FileUtils.copy(file, dest_file)
         end
       end
     else
