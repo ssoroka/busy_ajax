@@ -43,8 +43,8 @@ var BusyAjaxClass = Class.create({
   follow: function(e) {
     var busy_div = $(this.busy_div_name);
     if (busy_div && this.is_on) {
-      var w = window.innerWidth;
-      var h = window.innerHeight;
+      var w = Math.max(window.innerWidth, document.width);
+      var h = Math.max(window.innerHeight, document.height);
       var x = parseInt(this.mouse_x(e))+this.off_x;
       var y = parseInt(this.mouse_y(e))+this.off_y;
       if (x + 16 > w) {
