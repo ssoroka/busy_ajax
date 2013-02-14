@@ -1,4 +1,4 @@
-var BusyAjaxClass = Class.create({
+window.BusyAjaxClass = Class.create({
   busy_div_name: 'busy_ajax',
   off_x: 15,
   off_y: 15,
@@ -21,9 +21,9 @@ var BusyAjaxClass = Class.create({
   enable: function() {
     if (!this.is_on) {
       try {
-        busydiv = new Element('div', {id: this.busy_div_name});
+        var busydiv = new Element('div', {id: this.busy_div_name});
         busydiv.setStyle({display:'none', position: 'absolute', zIndex: '32000'});
-        spinimg = new Element('img', {src: this.spinner_url});
+        var spinimg = new Element('img', {src: this.spinner_url});
         busydiv.appendChild(spinimg);
         document.body.appendChild(busydiv);
         var self = this;
@@ -81,7 +81,7 @@ var BusyAjaxClass = Class.create({
   }
 });
 
-var busy_ajax = new BusyAjaxClass();
+window.busy_ajax = new BusyAjaxClass();
 // I'm handy for debugging, forces the spinner to show:
 // document.observe("dom:loaded", function() {
 //   busy_ajax.show_spinner();
